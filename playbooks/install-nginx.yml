@@ -1,0 +1,30 @@
+---
+- name: Install and configure Nginx on web servers
+  hosts: webservers
+  become: yes
+  
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+    
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+    
+    - name: Start Nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+    
+    - name: Create custom web page
+      copy:
+        content: |
+          <html>
+            <h1>DevOps Project 6 - Ansible Success!</h1>
+            <p>Deployed from VS Code on WSL</p>
+            <p>Container: {{ ansible_hostname }}</p>
+          </html>
+        dest: /var/www/html/index.html
